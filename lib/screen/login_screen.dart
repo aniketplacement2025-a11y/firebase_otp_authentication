@@ -14,8 +14,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
  final _emailController = TextEditingController();
+ final _passwordController = TextEditingController();
  final _auth = FirebaseAuth.instance;
  StreamSubscription? _sub;
+ bool _isForgotPassword = false;
 
  @override
  void initState(){
@@ -119,6 +121,19 @@ class _LoginScreenState extends State<LoginScreen> {
     }
    }
 
+   Future<void> _signInWithEmailAndPassword() async {
+   try {
+     await _auth.signInWithEmailAndPassword(
+         email: _emailController.text,
+         password: _passwordController.text,
+     );
+   } catch (e){
+     ScaffoldMessenger.of(context).showSnackBar(
+       SnackBar(content: Text('Error signing in: $e')),
+     );
+    }
+   }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -133,14 +148,31 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: const InputDecoration(labelText: 'Email'),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-                onPressed: _sendSignInLink,
-                child: const Text('Send Sign-In Link'),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: true,
             ),
+            ElevatedButton(
+                onPressed: _signInWithEmailAndPassword,
+                child: const Text('Submit'),
+            ),
+            TextButton(
+                onPressed: (){
+                   setState(() {
+                    _isForgotPassword = true; 
+                   });
+                  }, 
+                child: const Text('Forgot password'),
+            ),
+            if(_isForgotPassword)
+              ElevatedButton(
+                  onPressed: _sendSignInLink,
+                  child: const Text('Send OTP'),
+              ),
           ],
         ),
       ),
     );
   }
-
 }

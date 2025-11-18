@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "875893138946",
+    "project_id": "fir-otpauthentication-4f013",
+    "storage_bucket": "fir-otpauthentication-4f013.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875893138946:android:57678b40514d3d8dbc291b",
+        "android_client_info": {
+          "package_name": "com.example.firebase_otp_authentication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzsYwu2wnczqqUnFozsT3egsE1nfkegkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

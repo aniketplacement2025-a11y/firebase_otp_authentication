@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:firebase_otp_authentication/screen/home_screen.dart';
+import 'package:firebase_otp_authentication/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_otp_authentication/firebase_config.dart';
@@ -15,7 +17,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
  final _emailController = TextEditingController();
  final _passwordController = TextEditingController();
+ final AuthService _authService = AuthService();
  final _auth = FirebaseAuth.instance;
+ bool _isLoading = false;
  StreamSubscription? _sub;
  bool _isForgotPassword = false;
 
@@ -123,15 +127,51 @@ class _LoginScreenState extends State<LoginScreen> {
 
    Future<void> _signInWithEmailAndPassword() async {
    try {
-     await _auth.signInWithEmailAndPassword(
-         email: _emailController.text,
-         password: _passwordController.text,
-     );
+     String email = _emailController.text.trim();
+     String password = _passwordController.text.trim();
+
+     if(email.isEmpty || password.isEmpty){
+       // ScaffoldMessenger.of(context).showSnackBar(
+       //   SnackBar(content: Text('Please Fill all fields')),
+       // );
+       _showMessage('Please Fill all fields');
+       return;
+     }
+
+     setState(() {
+       _isLoading = true;
+     });
+
+     bool isAuthenticated = await _authService.authenticateUser(email, password);
+
+     setState(() {
+       _isLoading = false;
+     });
+
+     if(isAuthenticated){
+       //Navigate to home screen
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
+     } else {
+       // ScaffoldMessenger.of(context).showSnackBar(
+       //   SnackBar(content: Text('Invalid $email or $password')),
+       // );
+       _showMessage('Invalid $email or $password');
+     }
    } catch (e){
-     ScaffoldMessenger.of(context).showSnackBar(
-       SnackBar(content: Text('Error signing in: $e')),
-     );
+     // ScaffoldMessenger.of(context).showSnackBar(
+     //   SnackBar(content: Text('Error signing in: $e')),
+     // );
+     _showMessage('Error signing in: $e');
     }
+   }
+
+   void _showMessage(String message){
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2),
+      )
+    );
    }
 
   @override

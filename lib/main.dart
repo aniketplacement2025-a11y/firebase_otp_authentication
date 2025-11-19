@@ -4,16 +4,17 @@ import 'package:firebase_otp_authentication/services/auth_gate.dart';
 import 'package:firebase_otp_authentication/firebase_config.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: FirebaseOptions(
-     appId: "1:875893138946:android:57678b40514d3d8dbc291b",
-     projectId: firebaseProjectUrl,
-     databaseURL: "https://fir-otpauthentication-4f013-default-rtdb.firebaseio.com",
-     messagingSenderId: "875893138946",
-     apiKey: 'AIzaSyBzsYwu2wnczqqUnFozsT3egsE1nfkegkc'
-    ),
-  );
+   WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(
+  //   options: FirebaseOptions(
+  //    appId: "1:875893138946:android:57678b40514d3d8dbc291b",
+  //    projectId: firebaseProjectUrl,
+  //    databaseURL: "https://fir-otpauthentication-4f013-default-rtdb.firebaseio.com",
+  //    messagingSenderId: "875893138946",
+  //    apiKey: 'AIzaSyBzsYwu2wnczqqUnFozsT3egsE1nfkegkc'
+  //   ),
+  // );
+   await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
